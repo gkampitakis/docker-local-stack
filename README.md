@@ -33,3 +33,15 @@ Also if you want to start only one individual service you can run
 docker-compose run <service-name>
 
 ```
+
+### Mongodb
+
+Create user
+
+```
+use admin
+
+db.auth("admin",passwordPrompt())
+
+db.createUser({"user": "user","pwd":"12345","roles":[{"role":"readWrite","db":"my-db"}]})
+```
