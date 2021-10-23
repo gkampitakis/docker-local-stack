@@ -2,9 +2,22 @@
 
 ## Description 
 
-Contains a docker compose file for spinning up locally
+Contains docker compose files for spinning up locally various services. 
+Those files can be combined together for creating more complex stacks.
 
-- `mongodb`
+
+## Contents
+
+- Elasticsearch tdb
+- Kafka and Zookeeper tbd
+- [Mongodb](./mongodb/README.md)
+- Postgres tbd
+- Rabbitmq tdb
+- Redis tbd
+- Scylla tbd
+
+<!-- Below this point doc will be updated -->
+
 - `kafka` and `zookeeper`
 - `mysql:5.6.51`
 
@@ -32,16 +45,4 @@ Also if you want to start only one individual service you can run
 
 docker-compose run <service-name>
 
-```
-
-### Mongodb
-
-Create user
-
-```
-use admin
-
-db.auth("admin",passwordPrompt())
-
-db.createUser({"user": "user","pwd":"12345","roles":[{"role":"readWrite","db":"my-db"}]})
 ```

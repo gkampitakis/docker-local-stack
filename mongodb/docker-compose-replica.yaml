@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  mongodb0:
+    container_name: mongodb0
+    image: mongo:5.0.3
+    ports:
+      - 27017:27017
+    expose:
+     - 27017
+    volumes:
+      - ./data0/mongodb:/data/db # For persisting data to host
+    entrypoint: [ "/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all"]
+
+  mongodb1:
+    container_name: mongodb1
+    image: mongo:5.0.3
+    expose:
+     - 27017
+    volumes:
+      - ./data1/mongodb:/data/db # For persisting data to host
+    entrypoint: [ "/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all"]
+
+  mongodb2:
+    container_name: mongodb2
+    image: mongo:5.0.3
+    expose:
+     - 27017
+    volumes:
+      - ./data2/mongodb:/data/db # For persisting data to host
+    entrypoint: [ "/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all"]
