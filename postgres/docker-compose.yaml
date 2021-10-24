@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    ports:
+      - 5432:5432
+    env_file:
+      - database.env
+    volumes:
+      - ./pg_seed/:/docker-entrypoint-initdb.d/ # Init path
+      - ./data:/var/lib/postgresql/data/ # Persisent Data
+    healthcheck:
+      test: ['CMD','pg_isready','-q']
+      interval: 10s
+      retries: 5
+      timeout: 10s
