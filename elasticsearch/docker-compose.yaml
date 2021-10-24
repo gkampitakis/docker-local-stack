@@ -1,17 +1,17 @@
 version: '3.9'
 
 services:
-  es01:
-    container_name: es_container_1
+  es00:
+    container_name: es_container_0
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - bootstrap.memory_lock=true
-      - node.name=es01
+      - node.name=es00
       - cluster.name=es-docker-cluster
       - xpack.security.enabled=false
-      - discovery.seed_hosts=es02,es03
-      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es01,es02
+      - cluster.initial_master_nodes=es00,es01,es02
     ulimits:
       memlock:
         soft: -1
@@ -20,9 +20,16 @@ services:
       - es-net
     ports:
       - 9200:9200
+    volumes:
+      - ./data/es00/:/usr/share/elasticsearch/data:rw
+    healthcheck:
+      test: curl http://127.0.0.1:9200/_cat/health
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
-  es02:
-    container_name: es_container_2
+  es01:
+    container_name: es_container_1
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -30,17 +37,24 @@ services:
       - node.name=es02
       - cluster.name=es-docker-cluster
       - xpack.security.enabled=false
-      - discovery.seed_hosts=es01,es03
-      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es00,es03
+      - cluster.initial_master_nodes=es00,es01,es02
     ulimits:
       memlock:
         soft: -1
         hard: -1
     networks:
       - es-net
+    volumes:
+      - ./data/es01/:/usr/share/elasticsearch/data:rw
+    healthcheck:
+      test: curl http://127.0.0.1:9200/_cat/health
+      interval: 5s
+      timeout: 10s
+      retries: 5
 
-  es03:
-    container_name: es_container_3
+  es02:
+    container_name: es_container_2
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -48,21 +62,28 @@ services:
       - node.name=es03
       - cluster.name=es-docker-cluster
       - xpack.security.enabled=false
-      - discovery.seed_hosts=es01,es02
-      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es00,es03
+      - cluster.initial_master_nodes=es00,es01,es02
     ulimits:
       memlock:
         soft: -1
         hard: -1
     networks:
       - es-net
-    
+    volumes:
+      - ./data/es02/:/usr/share/elasticsearch/data:rw
+    healthcheck:
+      test: curl http://127.0.0.1:9200/_cat/health
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
   kibana:
     container_name: kb_container
     image: docker.elastic.co/kibana/kibana:7.15.1
     environment:
       ELASTICSEARCH_URL: http://es01:9200
-      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+      ELASTICSEARCH_HOSTS: '["http://es00:9200","http://es01:9200","http://es02:9200"]'
     networks:
       - es-net
     depends_on:
@@ -73,5 +94,3 @@ services:
 networks:
   es-net:
     driver: bridge
-
-# FIXME: add peristent volumes

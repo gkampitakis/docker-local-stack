@@ -1,0 +1,11 @@
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+
+extends: default
+
+rules:
+  document-start: disable
+  line-length: disable
+  comments: 
+    min-spaces-from-content: 1

@@ -8,7 +8,7 @@ Those files can be combined together for creating more complex stacks.
 
 ## Contents
 
-- Elasticsearch tdb
+- [Elasticsearch](./elasticsearch/README.md)
 - Kafka and Zookeeper tbd
 - [Mongodb](./mongodb/README.md)
 - Postgres tbd
@@ -22,6 +22,13 @@ Those files can be combined together for creating more complex stacks.
 - `mysql:5.6.51`
 
 ## Commands
+
+
+Lint YAML files with `yamllint`
+
+```bash
+yamllint .
+```
 
 Start docker compose command
 

@@ -39,7 +39,7 @@ services:
       CONFLUENT_SUPPORT_METRICS_ENABLE: 'false'
   # mysql:
   #   image: mysql:5.6.51
-  #   environment: 
+  #   environment:
   #     MYSQL_ROOT_PASSWORD: 'pass'
   #     MYSQL_USER: 'admin'
   #     MYSQL_PASS: 'pass'
