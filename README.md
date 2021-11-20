@@ -8,7 +8,7 @@ Those files can be combined together for creating more complex stacks.
 ## Contents
 
 - [Elasticsearch](./elasticsearch/README.md)
-- Kafka and Zookeeper tbd
+- [Kafka and Zookeeper](./kafka/README.md)
 - [Mongodb](./mongodb/README.md)
 - [Postgres](./postgres/README.md)
 - Rabbitmq tdb

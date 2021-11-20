@@ -12,7 +12,7 @@ services:
       - ./pg_seed/:/docker-entrypoint-initdb.d/ # Init path
       - ./data:/var/lib/postgresql/data/ # Persisent Data
     healthcheck:
-      test: ['CMD','pg_isready','-q']
+      test: ['CMD', 'pg_isready', '-q']
       interval: 10s
       retries: 5
       timeout: 10s
