@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.0.0
+    image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper
     hostname: zookeeper
     ports:
@@ -12,7 +12,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: confluentinc/cp-kafka:7.0.0
+    image: confluentinc/cp-kafka:7.0.1
     hostname: kafka
     container_name: kafka
     depends_on:
