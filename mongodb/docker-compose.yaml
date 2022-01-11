@@ -17,3 +17,4 @@ services:
     volumes:
       - './seed.js:/docker-entrypoint-initdb.d/mongo-init.js:ro' # For seeding database at start
       - ./data/mongodb:/data/db # For persisting data to host
+      - ./seeddata:/data/ # For loading seed data and importing to mongo

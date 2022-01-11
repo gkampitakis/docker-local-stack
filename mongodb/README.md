@@ -76,6 +76,14 @@ db.auth("admin",passwordPrompt())
 db.createUser({"user": "user","pwd":"12345","roles":[{"role":"readWrite","db":"my-db"}]})
 ```
 
+- Import collection
+
+
+```bash
+ mongoimport --db <db-name> --drop -c <collection-name> --uri mongodb://root:example@localhost:27017 --authenticationDatabase admin 
+ <file-name-json>
+```
+
 ## Future Work
 
 - Add automation for clustering. Already implemented in article
