@@ -10,7 +10,7 @@ services:
       - 27017
     volumes:
       - ./data0/mongodb:/data/db # For persisting data to host
-    entrypoint: ["/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all"]
+    entrypoint: ["/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all", "--slowms","1", "--logpath", "/var/log/mongodb/mongod.log"]
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
       interval: 10s
@@ -21,13 +21,15 @@ services:
   mongodb1:
     container_name: mongodb1
     image: mongo:5.0.6
+    ports:
+      - 27018:27018
     expose:
-      - 27017
+      - 27018
     volumes:
       - ./data1/mongodb:/data/db # For persisting data to host
-    entrypoint: ["/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all"]
+    entrypoint: ["/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all", "--slowms","1", "--port", "27018", "--logpath", "/var/log/mongodb/mongod.log"]
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27018/test --quiet
       interval: 10s
       timeout: 10s
       retries: 5
@@ -36,13 +38,15 @@ services:
   mongodb2:
     container_name: mongodb2
     image: mongo:5.0.6
+    ports:
+      - 27019:27019
     expose:
-      - 27017
+      - 27019
     volumes:
       - ./data2/mongodb:/data/db # For persisting data to host
-    entrypoint: ["/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all"]
+    entrypoint: ["/usr/bin/mongod", "--replSet", "rsmongo", "--bind_ip_all", "--slowms","1","--port", "27019", "--logpath", "/var/log/mongodb/mongod.log"]
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27019/test --quiet
       interval: 10s
       timeout: 10s
       retries: 5

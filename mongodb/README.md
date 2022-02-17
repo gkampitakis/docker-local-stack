@@ -23,6 +23,8 @@ show dbs
 
 ### Replica Set
 
+> ⚠️ Running with "--slowms 1" for debugging queries ( at what nodes getting directed )
+
 ```bash
 # Starting and stopping service
 docker-compose -f docker-compose-replica.yaml up -d
@@ -52,12 +54,12 @@ rsconf = {
        },
        {
            "_id": 1,
-           "host": "mongodb1:27017",
+           "host": "mongodb1:27018",
            "priority": 2
        },
        {
            "_id": 2,
-           "host": "mongodb2:27017",
+           "host": "mongodb2:27019",
            "priority": 1
        }
    ]
@@ -82,6 +84,28 @@ db.createUser({"user": "user","pwd":"12345","roles":[{"role":"readWrite","db":"m
 ```bash
  mongoimport --db <db-name> --drop -c <collection-name> --uri mongodb://root:example@localhost:27017 --authenticationDatabase admin 
  <file-name-json>
+```
+
+## Notes
+
+### MongoDB
+
+For getting logs from the mongo you can connect to the host
+
+```bash
+# Primary Node
+docker exec -it mongodb0 bash
+
+# Tail logs
+tail -f /var/log/mongodb/mongod.log | grep <collection-name>
+```
+
+### MongoClient
+
+For connecting to replica set you can pass on connection uri
+
+```js
+new MongoClient('mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=rsmongo');
 ```
 
 ## Future Work
