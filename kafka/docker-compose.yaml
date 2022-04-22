@@ -11,10 +11,10 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
-  kafka:
+  kafka-1:
     image: confluentinc/cp-kafka:7.0.1
-    hostname: kafka
-    container_name: kafka
+    hostname: kafka-1
+    container_name: kafka-1
     depends_on:
       - zookeeper
     ports:
@@ -24,9 +24,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://kafka:9092
+      KAFKA_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://kafka-1:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:29092,EXTERNAL://localhost:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -35,7 +35,71 @@ services:
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: localhost
     healthcheck:
-      test: ["CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka:29092"]
+      test: ["CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka-1:29092"]
+      interval: 30s
+      start_period: 30s
+      timeout: 10s
+      retries: 4
+
+  kafka-2:
+    image: confluentinc/cp-kafka:7.0.1
+    hostname: kafka-2
+    container_name: kafka-2
+    depends_on:
+      - zookeeper
+    ports:
+      - 29093:29093
+      - 9093:9093
+      - 9102:9102
+    profiles:
+      - "brokers"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://kafka-2:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29093,EXTERNAL://localhost:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9102
+      KAFKA_JMX_HOSTNAME: localhost
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka-2:29093"]
+      interval: 30s
+      start_period: 30s
+      timeout: 10s
+      retries: 4
+
+  kafka-3:
+    image: confluentinc/cp-kafka:7.0.1
+    hostname: kafka-3
+    container_name: kafka-3
+    depends_on:
+      - zookeeper
+    ports:
+      - 29094:29094
+      - 9094:9094
+      - 9103:9103
+    profiles:
+      - "brokers"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://kafka-3:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:29094,EXTERNAL://localhost:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9103
+      KAFKA_JMX_HOSTNAME: localhost
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--list", "--bootstrap-server", "kafka-3:29094"]
       interval: 30s
       start_period: 30s
       timeout: 10s
@@ -46,7 +110,7 @@ services:
     hostname: akhq
     container_name: akhq
     depends_on:
-      - kafka
+      - kafka-1
       - zookeeper
     ports:
       - 8080:8080
@@ -56,4 +120,4 @@ services:
           connections:
             docker-kafka-server:
               properties:
-                bootstrap.servers: "kafka:29092"
+                bootstrap.servers: "kafka-1:29092,kafka-2:29093,kafka-3:29094"
