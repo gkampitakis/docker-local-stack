@@ -3,7 +3,7 @@ version: '3.9'
 services:
   mongodb0:
     container_name: mongodb0
-    image: mongo:7.0.4
+    image: mongo:7.0.5
     ports:
       - 27017:27017
     expose:
@@ -20,7 +20,7 @@ services:
 
   mongodb1:
     container_name: mongodb1
-    image: mongo:7.0.4
+    image: mongo:7.0.5
     ports:
       - 27018:27018
     expose:
@@ -37,7 +37,7 @@ services:
 
   mongodb2:
     container_name: mongodb2
-    image: mongo:7.0.4
+    image: mongo:7.0.5
     ports:
       - 27019:27019
     expose:
